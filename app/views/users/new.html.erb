@@ -1,0 +1,18 @@
+<form action='/users' method='post'>
+<p> Registration Form </p>
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  First Name:<input type='text' name ='user[first_name]'><br>
+  Last Name:<input type='text' name ='user[last_name]'><br>
+  Email:<input type='text' name ='user[email]'><br>
+  Password:<input type='password' name ='user[password]'><br>
+  Password Confirmation:<input type='password' name ='user[password_confirmation]'><br>
+  
+  <input type='submit' value='Register' />
+</form>
+
+<a href='/sessions/new'>Already Registered Please Click This Link</a>
+
+
+<% if !flash.empty? %>         
+    <p>  <%= flash[:error] %> </p>            
+<% end %> 

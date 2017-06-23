@@ -1,0 +1,126 @@
+<p>Hello  <%= current_user.first_name %>!!! </p>
+
+<form action="/items" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <p>Sell Product</p>
+   Product Name:<input type='text' name ='item[product_name]'><br>
+    Amount:<input type="number" name ='item[amount]'><br>
+    <input type='submit' value='Sell' >
+  </form>
+
+<h3>Your products that are not yet sold</h3>
+<table>
+  <thead>
+    <tr>
+      <td>Product Name</td>
+      <td>Date Posted</td>
+      <td>Amount</td>
+      <td>Action</td>
+
+    </tr>
+  </thead>
+  <tbody>
+  <% if !@items_pending.empty? %>
+        <% @items_pending.each do |item| %>
+        <tr>
+    
+                <td><%= item.product_name %></td>
+                 <td><%= item.created_at.strftime("%B %d %Y")%></td>
+                <td> $ <%= item.amount%>.00</td>
+                <td> <form action='/items/<%= item.id %>' method='post'>
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="hidden" name="_method" value="delete">
+
+            <input type='submit' value='delete' ><br>
+        </form></td>
+    
+         </tr>
+        <% end %>
+     <% end %>   
+    
+   
+  </tbody>
+</table>
+
+
+
+
+
+
+<h3>Sales</h3>
+<table>
+  <thead>
+    <tr>
+      <td>Product Name</td>
+      <td>Date Bought</td>
+      <td>Buyer</td>
+      <td>Amount</td>
+
+    </tr>
+  </thead>
+  <tbody>
+  <% if !@items_sold.empty? %>
+        <% @items_sold.each do |item| %>
+        <tr>
+    
+                <td><%= item.product_name %></td>
+                 <td><%= item.date.strftime("%B %d %Y")%></td>
+                 <td><%= item.purchase.user.first_name%></td>
+                <td> $ <%= item.amount%>.00</td>
+               
+    
+         </tr>
+        <% end %>
+     <% end %> 
+   
+  </tbody>
+</table>
+
+<h3>Purchases</h3>
+<table>
+  <thead>
+    <tr>
+      <td>Product Name</td>
+      <td>Date Bought</td>
+      <td>Seller</td>
+      <td>Amount</td>
+
+    </tr>
+  </thead>
+  <tbody>
+   <% if !@items_purchased.empty? %>
+        <% @items_purchased.each do |item| %>
+        <tr>
+    
+                <td><%= item.product_name %></td>
+                 <td><%= item.date.strftime("%B %d %Y")%></td>
+                    <td><%= item.user.first_name%></td>
+             <td> $ <%= item.amount%>.00</td>
+    
+         </tr>
+        <% end %>
+     <% end %>   
+   
+  </tbody>
+</table>
+
+
+
+
+
+
+<a href='/allitems'> <button>View All The Items</button> </a>
+
+<% if !flash.empty? %>         
+    <p>  <%= flash[:error] %> </p>            
+<% end %> 
+
+
+
+<% if current_user %>
+  <form action="/sessions/<%=current_user.id%>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Log Out">
+  </form>
+<% end %> 

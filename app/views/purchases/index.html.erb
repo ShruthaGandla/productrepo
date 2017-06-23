@@ -1,0 +1,47 @@
+<h2> Hello <%= current_user.first_name %> </h2>
+<h3>All Products</h3>
+<table>
+  <thead>
+    <tr>
+      <td>Product Name</td>
+      <td>Seller</td>
+      <td>Date Posted</td>
+      <td>Amount</td>
+      <td>Action</td>
+
+    </tr>
+  </thead>
+  <tbody>
+  <% if !@allitems.empty? %>
+  <% @allitems.each do |item| %>
+    <tr>
+    
+      <td><%= item.product_name %></td>
+      <td><%= item.user.first_name %></td>
+      <td><%= item.created_at.strftime("%B %d %Y")%></td>
+      <td> $ <%= item.amount%>.00</td>
+      <td>  
+        <form action='/purchases/<%= item.id %>' method='post'>
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type='submit' value='Buy' ><br>
+        </form>
+      
+        </td>
+    </tr>
+  <% end %>
+  <% end %>
+   
+  </tbody>
+</table>
+
+<% if current_user %>
+  <form action="/sessions/<%=current_user.id%>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Log Out">
+  </form>
+<% end %> 
+
+<% if current_user %>
+<a href='/users/profile'>Go to user profile</a>
+<% end %> 
